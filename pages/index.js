@@ -2,6 +2,7 @@ import MainGrid from '../src/components/MainGrid';
 import Box from '../src/components/Box';
 import {
   AlurakutMenu,
+  AlurakutProfileSidebarMenuDefault,
   OrkutNostalgicIconSet,
 } from '../src/lib/AlurakutCommons';
 import { ProfileRelationsBoxWrapper } from '../src/components/ProfileRelations';
@@ -14,6 +15,15 @@ function ProfileSidebar(props) {
         style={{ borderRadius: '8px' }}
         alt="foto do perfil"
       />
+      <hr />
+      <p>
+        <a className="boxLink" href={`https://github.com/${props.githubUser}`}>
+          @{props.githubUser}
+        </a>
+      </p>
+      <hr />
+
+      <AlurakutProfileSidebarMenuDefault />
     </Box>
   );
 }
@@ -39,10 +49,33 @@ export default function Home() {
         <div className="welcomeArea" style={{ gridArea: `welcomeArea` }}>
           <Box>
             <h1 className="title">Bem Vindo(a)</h1>
-
             <OrkutNostalgicIconSet />
           </Box>
-          <Box>Mensagem</Box>
+          <Box>
+            <h2 className="subTitle">O que você deseja fazer ?</h2>
+            <form
+              onSubmit={(event) => {
+                event.preventDefault();
+              }}
+            >
+              <div>
+                <input
+                  placeholder="Qual vai ser o nome da sua comunidade?"
+                  name="title"
+                  aria-label="Qual vai ser o nome da sua comunidade?"
+                  type="text"
+                />
+              </div>
+              <div>
+                <input
+                  placeholder="Coloque uma URL para usar de capa."
+                  name="image"
+                  aria-label="Coloque uma URL para usar de capa."
+                />
+              </div>
+              <button>Criar comunidade</button>
+            </form>
+          </Box>
         </div>
         <div
           className="profileRelationsArea"

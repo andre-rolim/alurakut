@@ -14,7 +14,7 @@ function Link({ href, children, ...props }) {
 }
 
 // ================================================================================================================
-// Menu
+// Menu cor da paleta 1 #781419
 // ================================================================================================================
 export function AlurakutMenu({ githubUser }) {
   const [isMenuOpen, setMenuState] = React.useState(false);
@@ -58,7 +58,7 @@ export function AlurakutMenu({ githubUser }) {
 }
 AlurakutMenu.Wrapper = styled.header`
   width: 100%;
-  background-color: #308bc5;
+  background-color: #f52a35;
 
   .alurakutMenuProfileSidebar {
     background: white;
@@ -86,7 +86,7 @@ AlurakutMenu.Wrapper = styled.header`
     }
     .boxLink {
       font-size: 18px;
-      color: #2e7bb4;
+      color: #f52a35;
       -webkit-text-decoration: none;
       text-decoration: none;
       font-weight: 800;
@@ -96,12 +96,12 @@ AlurakutMenu.Wrapper = styled.header`
       margin-top: 12px;
       margin-bottom: 8px;
       border-color: transparent;
-      border-bottom-color: #ecf2fa;
+      border-bottom-color: #75373a;
     }
   }
 
   .container {
-    background-color: #308bc5;
+    background-color: #f52a35;
     padding: 7px 16px;
     max-width: 1110px;
     margin: auto;
@@ -136,7 +136,7 @@ AlurakutMenu.Wrapper = styled.header`
         text-decoration: none;
         &:after {
           content: ' ';
-          background-color: #5292c1;
+          background-color: #75373a;
           display: block;
           position: absolute;
           width: 1px;
@@ -150,7 +150,7 @@ AlurakutMenu.Wrapper = styled.header`
     }
     input {
       color: #ffffff;
-      background: #5579a1;
+      background: #75373a;
       padding: 10px 42px;
       border: 0;
       background-image: url(${`${BASE_URL}/icons/search.svg`});
@@ -235,7 +235,7 @@ export function AlurakutProfileSidebarMenuDefault() {
 AlurakutProfileSidebarMenuDefault.Wrapper = styled.div`
   a {
     font-size: 12px;
-    color: #2e7bb4;
+    color: #c22129;
     margin-bottom: 16px;
     display: flex;
     align-items: center;
@@ -354,18 +354,18 @@ OrkutNostalgicIconSet.List = styled.ul`
 // ================================================================================================================
 const AlurakutLoginScreen = css`
   :root {
-    --backgroundPrimary: #d9e6f6;
-    --backgroundSecondary: #f1f9fe;
+    --backgroundPrimary: #f7747a;
+    --backgroundSecondary: #fcdee0;
     --backgroundTertiary: #ffffff;
-    --backgroundQuarternary: #bbcde8;
-    --colorPrimary: #2e7bb4;
-    --colorSecondary: #388bb0;
-    --colorTertiary: #2f4a71;
+    --backgroundQuarternary: #d19d9f;
+    --colorPrimary: #f52a35;
+    --colorSecondary: #c22129;
+    --colorTertiary: #75373a;
     --colorQuarternary: #d81d99;
     --textPrimaryColor: #333333;
     --textSecondaryColor: #ffffff;
     --textTertiaryColor: #5a5a5a;
-    --textQuarternaryColor: #c5c6ca;
+    --textQuarternaryColor: #bdaeae;
     --commonRadius: 8px;
   }
 
