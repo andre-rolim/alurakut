@@ -9,7 +9,9 @@ const GlobalStyle = createGlobalStyle`
   }
 
   body {
-    background: #f5c4c6;
+    //background: #f5c4c6;
+    background-image: url(https://i.imgur.com/y3uG9J8.jpg);
+    background-size: 100% 100%;
     font-family: sans-serif;
   }
 

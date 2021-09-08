@@ -6,10 +6,11 @@ import {
   OrkutNostalgicIconSet,
 } from '../src/lib/AlurakutCommons';
 import { ProfileRelationsBoxWrapper } from '../src/components/ProfileRelations';
+import React from 'react';
 
 function ProfileSidebar(props) {
   return (
-    <Box>
+    <Box as="aside">
       <img
         src={`https://github.com/${props.githubUser}.png`}
         style={{ borderRadius: '8px' }}
@@ -30,6 +31,15 @@ function ProfileSidebar(props) {
 
 export default function Home() {
   const githubUser = 'andre-rolim';
+  const [comunidades, setComunidades] = React.useState([
+    {
+      id: '056032048510321541sad1451',
+      title: 'Eu odeio acordar cedo',
+      image: 'https://alurakut.vercel.app/capa-comunidade-01.jpg',
+      link: 'facebook.com'
+    },
+  ]);
+
   const pessoasFavoritas = [
     'juunegreiros',
     'omariosouto',
@@ -38,10 +48,11 @@ export default function Home() {
     'marcobrunodev',
     'felipefialho',
   ];
+  
 
   return (
     <>
-      <AlurakutMenu />
+      <AlurakutMenu githubUser={githubUser} />
       <MainGrid>
         <div className="profileArea" style={{ gridArea: `profileArea` }}>
           <ProfileSidebar githubUser={githubUser} />
@@ -56,6 +67,16 @@ export default function Home() {
             <form
               onSubmit={(event) => {
                 event.preventDefault();
+                const dadosDoForm = new FormData(event.target);
+
+                const comunidade = {
+                  id: new Date().toISOString,
+                  title: dadosDoForm.get('title'),
+                  image: dadosDoForm.get('image'),
+                  image: dadosDoForm.get('link'),
+                };
+                const comunidadesAtualizadas = [...comunidades, comunidade];
+                setComunidades(comunidadesAtualizadas);
               }}
             >
               <div>
@@ -73,6 +94,13 @@ export default function Home() {
                   aria-label="Coloque uma URL para usar de capa."
                 />
               </div>
+              <div>
+                <input
+                  placeholder="Coloque o link da sua comunidade. não colocar o https://"
+                  name="link"
+                  aria-label="Coloque o link da sua comunidade."
+                />
+              </div>
               <button>Criar comunidade</button>
             </form>
           </Box>
@@ -85,14 +113,28 @@ export default function Home() {
             <h2 className="smallTitle">
               Pessoas da Comunidade ({pessoasFavoritas.length})
             </h2>
-
             <ul>
               {pessoasFavoritas.map((itemAtual) => {
                 return (
-                  <li>
-                    <a href={`/users/${itemAtual}`} key={itemAtual}>
+                  <li key={itemAtual}>
+                    <a href={`https://github.com/${itemAtual}`} target="_blank">
                       <img src={`https://github.com/${itemAtual}.png`} alt="" />
-                      <span>{itemAtual}</span>
+                      <span>{`${itemAtual}`}</span>
+                    </a>
+                  </li>
+                );
+              })}
+            </ul>
+          </ProfileRelationsBoxWrapper>
+          <ProfileRelationsBoxWrapper>
+            <h2 className="smallTitle">Comunidades ({comunidades.length})</h2>
+            <ul>
+              {comunidades.map((itemAtual) => {
+                return (
+                  <li key={itemAtual.id}>
+                    <a href={`https://${itemAtual.link}`} target="_blank">
+                      <img src={itemAtual.image} alt="" />
+                      <span>{itemAtual.title}</span>
                     </a>
                   </li>
                 );
