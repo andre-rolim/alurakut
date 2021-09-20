@@ -19,6 +19,14 @@ const MainGrid = styled.main`
     grid-template-areas: 'profileArea welcomeArea profileRelationsArea';
     grid-template-columns: 160px 1fr 312px;
   }
+
+  .verMais{
+    color: blue;
+    display: block;
+    font-size: 14px;
+    margin-top: -10px;
+    cursor: pointer;
+  }
 `;
 
 export default MainGrid;

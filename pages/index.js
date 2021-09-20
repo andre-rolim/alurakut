@@ -1,19 +1,19 @@
-import MainGrid from '../src/components/MainGrid';
-import Box from '../src/components/Box';
+import MainGrid from "../src/components/MainGrid";
+import Box from "../src/components/Box";
 import {
   AlurakutMenu,
   AlurakutProfileSidebarMenuDefault,
   OrkutNostalgicIconSet,
-} from '../src/lib/AlurakutCommons';
-import { ProfileRelationsBoxWrapper } from '../src/components/ProfileRelations';
-import React from 'react';
+} from "../src/lib/AlurakutCommons";
+import { ProfileRelationsBoxWrapper } from "../src/components/ProfileRelations";
+import React from "react";
 
 function ProfileSidebar(props) {
   return (
     <Box as="aside">
       <img
         src={`https://github.com/${props.githubUser}.png`}
-        style={{ borderRadius: '8px' }}
+        style={{ borderRadius: "8px" }}
         alt="foto do perfil"
       />
       <hr />
@@ -29,26 +29,79 @@ function ProfileSidebar(props) {
   );
 }
 
+function ProfileRelationsBox({ title, items }) {
+  return (
+    <ProfileRelationsBoxWrapper>
+      <h2 className="smallTitle">
+        {title} ({items.length})
+      </h2>
+      <ul>
+        {/*seguidores.map((itemAtual) => {
+          return (
+            <li key={itemAtual}>
+              <a href={`https://github.com/${itemAtual}`} target="_blank">
+                <img src={`https://github.com/${itemAtual}.png`} alt="" />
+                <span>{`${itemAtual}`}</span>
+              </a>
+            </li>
+          );
+        })*/}
+      </ul>
+    </ProfileRelationsBoxWrapper>
+  );
+}
+
 export default function Home() {
-  const githubUser = 'andre-rolim';
-  const [comunidades, setComunidades] = React.useState([
-    {
-      id: '056032048510321541sad1451',
-      title: 'Eu odeio acordar cedo',
-      image: 'https://alurakut.vercel.app/capa-comunidade-01.jpg',
-      link: 'facebook.com'
-    },
-  ]);
+  const githubUser = "andre-rolim";
+  const [comunidades, setComunidades] = React.useState([]);
 
   const pessoasFavoritas = [
-    'juunegreiros',
-    'omariosouto',
-    'peas',
-    'rafaballerini',
-    'marcobrunodev',
-    'felipefialho',
+    "juunegreiros",
+    "omariosouto",
+    "peas",
+    "rafaballerini",
+    "marcobrunodev",
+    "felipefialho",
   ];
-  
+
+  const [seguidores, setSeguidores] = React.useState([]);
+  React.useEffect(() => {
+    fetch("https://api.github.com/users/peas/followers")
+      .then(function (respostaDoServidor) {
+        return respostaDoServidor.json();
+      })
+      .then(function (respostaCompleta) {
+        setSeguidores(respostaCompleta);
+      });
+
+    //API GraphQL
+    const token = "6fa7e6441ad605caacda27a600692c";
+    fetch("https://graphql.datocms.com/", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        query: `query{ 
+          allCommunities {
+            id,
+            title,
+            imageUrl,
+            linkUrl,
+            creatorSlug
+          } 
+        }`,
+      }),
+    })
+      .then((response) => response.json())
+      .then((respostaCompleta) => {
+        const comunidadesDato = respostaCompleta.data.allCommunities;
+
+        setComunidades(comunidadesDato);
+      });
+  }, []);
 
   return (
     <>
@@ -70,13 +123,24 @@ export default function Home() {
                 const dadosDoForm = new FormData(event.target);
 
                 const comunidade = {
-                  id: new Date().toISOString,
-                  title: dadosDoForm.get('title'),
-                  image: dadosDoForm.get('image'),
-                  image: dadosDoForm.get('link'),
+                  title: dadosDoForm.get("title"),
+                  imageUrl: dadosDoForm.get("image"),
+                  linkUrl: dadosDoForm.get("link"),
+                  creatorSlug: githubUser,
                 };
-                const comunidadesAtualizadas = [...comunidades, comunidade];
-                setComunidades(comunidadesAtualizadas);
+
+                fetch("/api/comunidades", {
+                  method: "POST",
+                  headers: {
+                    "Content-type": "application/json",
+                  },
+                  body: JSON.stringify(comunidade),
+                }).then(async (response) => {
+                  const dados = await response.json();
+                  const comunidade = dados.registroCriado;
+                  const comunidadesAtualizadas = [...comunidades, comunidade];
+                  setComunidades(comunidadesAtualizadas);
+                });
               }}
             >
               <div>
@@ -96,7 +160,7 @@ export default function Home() {
               </div>
               <div>
                 <input
-                  placeholder="Coloque o link da sua comunidade. não colocar o https://"
+                  placeholder="Coloque o link da sua comunidade."
                   name="link"
                   aria-label="Coloque o link da sua comunidade."
                 />
@@ -114,7 +178,7 @@ export default function Home() {
               Pessoas da Comunidade ({pessoasFavoritas.length})
             </h2>
             <ul>
-              {pessoasFavoritas.map((itemAtual) => {
+              {pessoasFavoritas.slice(0, 6).map((itemAtual) => {
                 return (
                   <li key={itemAtual}>
                     <a href={`https://github.com/${itemAtual}`} target="_blank">
@@ -129,16 +193,19 @@ export default function Home() {
           <ProfileRelationsBoxWrapper>
             <h2 className="smallTitle">Comunidades ({comunidades.length})</h2>
             <ul>
-              {comunidades.map((itemAtual) => {
+              {comunidades.slice(0, 6).map((item) => {
                 return (
-                  <li key={itemAtual.id}>
-                    <a href={`https://${itemAtual.link}`} target="_blank">
-                      <img src={itemAtual.image} alt="" />
-                      <span>{itemAtual.title}</span>
+                  <li key={item.id}>
+                    <a href={item.linkUrl} target="_blank">
+                      <img src={item.imageUrl} />
+                      <span>{item.title}</span>
                     </a>
                   </li>
                 );
               })}
+              {comunidades.length > 6 ? (
+                <p className="verMais">Ver Mais...</p>
+              ) : null}
             </ul>
           </ProfileRelationsBoxWrapper>
         </div>
