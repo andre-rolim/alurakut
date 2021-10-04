@@ -23,6 +23,6 @@ export default async function recebedorDeRequests(request, response) {
   }
 
   response.status(404).json({
-    message: 'ainda não temos nada no GET, mas no POST tem!'
-  })
+    message: "ainda não temos nada no GET, mas no POST tem!",
+  });
 }
